@@ -8,9 +8,11 @@ class QuickIterator(object):
     def __init__(self):
         self.it = 0
     def next(self):
-        out = self.it
         self.it += 1
-        return out
+        return self.it 
+    def previous(self):
+        self.it -= 1
+        return self.it
     
 QIT = QuickIterator()
 app = Flask(__name__)
@@ -23,13 +25,13 @@ def index():
     if request.method == 'POST':
         if 'Correct' in request.form.values():
             df.ix[it, 'validation'] = True
-        else:
+        elif'Incorrect':
             df.ix[it, 'validation'] = False
         #it += 1
         write_csv(it)
-        QIT.next()
-        next_row = get_row_as_dict(it+1)
-        row_no = it +1
+        #QIT.next()
+        row_no = it+1
+        next_row = get_row_as_dict(row_no)
     elif request.method == 'GET':
         next_row = get_row_as_dict(it)
         row_no = it
@@ -49,7 +51,7 @@ def write_csv(row_no):
             writer = csv.DictWriter(csv_file, field_names,delimiter=';')
             writer.writerow(new_row_dict)
     else:
-        df.loc[:QIT.it].to_csv(csv_file_path,sep=';',index=False)
+        df.loc[:row_no].to_csv(csv_file_path,sep=';',index=False)
 
 
 def get_row_as_dict(row_id):
