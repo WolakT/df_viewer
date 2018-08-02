@@ -1,0 +1,19 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>Flask Example</title>
+  </head>
+  <body>
+    <form method="POST" action="">
+      <h2> Row no: {{row_no}} </h2>
+      <h2> Value: {{desc_text}} </h2>
+      <h3> Type: {{type}} </h3>
+
+      <input type="submit" name="Correct" value="Correct">
+      <input type="submit" name="Incorrect" value="Incorrect">
+    </form>
+    {% if name %}
+      <h1>Hello, {{name}}!</h1>
+    {% endif %}
+  </body>
+</html>
