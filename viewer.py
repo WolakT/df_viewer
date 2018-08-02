@@ -2,6 +2,7 @@ from flask import Flask, render_template, request
 import pandas as pd
 import os.path
 import csv
+import argparse
 
 class QuickIterator(object):
     def __init__(self):
@@ -13,9 +14,8 @@ class QuickIterator(object):
     
 QIT = QuickIterator()
 app = Flask(__name__)
-df = pd.read_pickle("data/data-frame.pickle")
-csv_file_path = 'data/result.csv'
- 
+df = None
+csv_file_path = 'data/results.csv'  
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -57,4 +57,9 @@ def get_row_as_dict(row_id):
 
 
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument("df_path", help="provide the path to the pickle file")
+    args = parser.parse_args()
+    df_file_path = args.df_path
+    df = pd.read_pickle(df_file_path)
     app.run(debug=True)
