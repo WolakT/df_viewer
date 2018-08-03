@@ -21,21 +21,32 @@ csv_file_path = 'data/results.csv'
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    it = get_rows_count() 
+    it = QIT.it 
     if request.method == 'POST':
         if 'Correct' in request.form.values():
             df.ix[it, 'validation'] = True
-        elif'Incorrect':
+            it = QIT.next()   
+        elif'Incorrect' in request.form.values():
             df.ix[it, 'validation'] = False
+            it = QIT.next()
+        elif'Previous' in request.form.values():
+            it = QIT.previous()
+        elif'Next'in request.form.values():
+            it = QIT.next()
+        elif'Write to csv'in request.form.values():
+            write_csv()
+
         #it += 1
-        write_csv(it)
+#        write_csv(it)
         #QIT.next()
-        row_no = it+1
+        row_no = it
         next_row = get_row_as_dict(row_no)
     elif request.method == 'GET':
+        
         next_row = get_row_as_dict(it)
         row_no = it
-    return render_template('index.html', desc_text=next_row['DESC_TEXT'], row_no=row_no, type=next_row['type'])
+    first = it > 0
+    return render_template('index.html', desc_text=next_row['DESC_TEXT'], row_no=row_no, type=next_row['type'], first=first)
 
 def get_rows_count():
     if os.path.exists(csv_file_path):
@@ -43,15 +54,11 @@ def get_rows_count():
         return len(temp_df)
     else:
         return 0
-def write_csv(row_no):
+def write_csv():
     if os.path.exists(csv_file_path):
-        with open(csv_file_path,'a',newline=''   ) as csv_file:
-            field_names = df.columns.tolist()
-            new_row_dict = df.loc[row_no].to_dict()
-            writer = csv.DictWriter(csv_file, field_names,delimiter=';')
-            writer.writerow(new_row_dict)
-    else:
-        df.loc[:row_no].to_csv(csv_file_path,sep=';',index=False)
+        os.remove(csv_file_path)
+
+    df.to_csv(csv_file_path,sep=';',index=False)
 
 
 def get_row_as_dict(row_id):
@@ -64,4 +71,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
     df_file_path = args.df_path
     df = pd.read_pickle(df_file_path)
+    if os.path.exists(csv_file_path):
+        os.remove(csv_file_path)
+    df['validation'] = 'NaN'
     app.run(debug=True)

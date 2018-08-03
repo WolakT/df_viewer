@@ -9,10 +9,14 @@
       <h2> Value: {{desc_text}} </h2>
       <h3> Type: {{type}} </h3>
 
+      {% if first %}
       <input type="submit" name="Previous" value="Previous">
+      {% endif %}
       <input type="submit" name="Correct" value="Correct">
       <input type="submit" name="Incorrect" value="Incorrect"> 
       <input type="submit" name="Next" value="Next">
+      <input type="submit" name="Write" value="Write to csv">
+
     </form>
     {% if name %}
       <h1>Hello, {{name}}!</h1>
