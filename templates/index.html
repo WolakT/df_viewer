@@ -1,13 +1,14 @@
 <!DOCTYPE HTML>
 <html>
   <head>
-    <title>Flask Example</title>
+    <title>Data Frame Viewer</title>
   </head>
   <body>
     <form method="POST" action="">
+      <h2> Currently viewing: {{file_name}} </h2>
       <h2> Row no: {{row_no}} </h2>
       <h2> Value: {{desc_text}} </h2>
-      <h3> Type: {{type}} </h3>
+      <h2> Type: {{type}} </h2>
 
       {% if first %}
       <input type="submit" name="Previous" value="Previous">
