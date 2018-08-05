@@ -20,6 +20,9 @@ df = None
 csv_file_path = 'data/results.csv'  
 pickle_file_path = 'data/results.pickle'
 file_name = None
+@app.route('/test', methods=['GET'])
+def test():
+    return render_template('test.html')
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -48,7 +51,7 @@ def index():
         next_row = get_row_as_dict(it)
         row_no = it
     first = it > 0
-    return render_template('index.html', desc_text=next_row['DESC_TEXT'], row_no=row_no, type=next_row['type'], first=first, file_name=file_name)
+    return render_template('test.html', desc_text=next_row['DESC_TEXT'], row_no=row_no, type=next_row['type'], first=first, file_name=file_name)
 
 def get_rows_count():
     if os.path.exists(csv_file_path):
@@ -59,7 +62,9 @@ def get_rows_count():
 def write_csv():
     if os.path.exists(csv_file_path):
         os.remove(csv_file_path)
-
+    elif os.path.exists(pickle_file_path):
+        os.remove(pickle_file_path)
+    print("test")
     df.to_csv(csv_file_path,sep=';',index=False)
     df.to_pickle(pickle_file_path)
 
@@ -75,10 +80,6 @@ if __name__ == '__main__':
     df_file_path = args.df_path
     df = pd.read_pickle(df_file_path)
     file_name = os.path.splitext(df_file_path)[0]
-    if os.path.exists(pickle_file_path):
-        os.remove(pickle_file_path)
-    if os.path.exists(csv_file_path):
-        os.remove(csv_file_path)
     if not 'validation' in df:
         df['validation'] = 'NaN'
     app.run(debug=True)
