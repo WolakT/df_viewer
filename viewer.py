@@ -64,7 +64,6 @@ def write_csv():
         os.remove(csv_file_path)
     elif os.path.exists(pickle_file_path):
         os.remove(pickle_file_path)
-    print("test")
     df.to_csv(csv_file_path,sep=';',index=False)
     df.to_pickle(pickle_file_path)
 

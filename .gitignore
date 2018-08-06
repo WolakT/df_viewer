@@ -43,3 +43,9 @@ venv
 
 # coverage
 cover
+# idea
+*.idea
+# output data
+data/results.csv
+data/results.pickle
+
