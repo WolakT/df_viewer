@@ -20,6 +20,9 @@ df = None
 csv_file_path = 'data/results.csv'  
 pickle_file_path = 'data/results.pickle'
 file_name = None
+column1 = None
+column2 = None
+
 @app.route('/test', methods=['GET'])
 def test():
     return render_template('test.html')
@@ -51,7 +54,7 @@ def index():
         next_row = get_row_as_dict(it)
         row_no = it
     first = it > 0
-    return render_template('test.html', desc_text=next_row['DESC_TEXT'], row_no=row_no, type=next_row['type'], first=first, file_name=file_name)
+    return render_template('test.html', desc_text=next_row[column1], row_no=row_no, type=next_row[column2], first=first, file_name=file_name)
 
 def get_rows_count():
     if os.path.exists(csv_file_path):
@@ -78,6 +81,9 @@ if __name__ == '__main__':
     args = parser.parse_args()
     df_file_path = args.df_path
     df = pd.read_pickle(df_file_path)
+    col_list = df.columns.tolist()
+    column1 = col_list[0]
+    column2 = col_list[1]
     file_name = os.path.splitext(df_file_path)[0]
     if not 'validation' in df:
         df['validation'] = 'NaN'
